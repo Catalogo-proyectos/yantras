@@ -1,31 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, Search, Menu } from 'lucide-react';
+import { ShoppingBag, Search, Menu, X } from 'lucide-react';
 
-export const Navbar = () => {
+export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll when menu open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
   return (
-    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-      <div className="nav-links">
-        <a href="#men" className="nav-link">Men</a>
-        <a href="#women" className="nav-link">Women</a>
+    <>
+      <nav id="main-nav" className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+        <div className="nav-links">
+          <a href="#coleccion" className="nav-link">Colección</a>
+          <a href="#editorial" className="nav-link">Editorial</a>
+        </div>
+
+        <a href="#" className="nav-brand">Yantras</a>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+          <div className="nav-links">
+            <a href="#gift" className="nav-link">Gift Card</a>
+          </div>
+          <a href="#coleccion" className="nav-cta">Ver Colección</a>
+          <div className="nav-links" style={{ gap: '20px' }}>
+            <a href="#" className="nav-link" aria-label="Buscar"><Search size={18} /></a>
+            <a href="#" className="nav-link" aria-label="Carrito"><ShoppingBag size={18} /></a>
+          </div>
+          <button 
+            className="nav-hamburger" 
+            onClick={() => setMenuOpen(true)} 
+            aria-label="Abrir menú"
+          >
+            <Menu size={24} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <button 
+          className="mobile-menu-close" 
+          onClick={() => setMenuOpen(false)} 
+          aria-label="Cerrar menú"
+        >
+          <X size={28} />
+        </button>
+        <a href="#coleccion" className="nav-link" onClick={() => setMenuOpen(false)}>Colección</a>
+        <a href="#editorial" className="nav-link" onClick={() => setMenuOpen(false)}>Editorial</a>
+        <a href="#gift" className="nav-link" onClick={() => setMenuOpen(false)}>Gift Card</a>
+        <a href="#" className="nav-link" onClick={() => setMenuOpen(false)}>Buscar</a>
+        <a href="#" className="nav-link" onClick={() => setMenuOpen(false)}>Carrito</a>
       </div>
-      
-      <div className="nav-brand">Yantras</div>
-      
-      <div className="nav-links" style={{ gap: '24px' }}>
-        <a href="#" className="nav-link"><Search size={20} /></a>
-        <a href="#" className="nav-link"><ShoppingBag size={20} /></a>
-        <a href="#" className="nav-link"><Menu size={20} /></a>
-      </div>
-    </nav>
+    </>
   );
 };

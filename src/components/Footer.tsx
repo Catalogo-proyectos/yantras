@@ -1,56 +1,110 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
 
-const InstagramIcon = () => (
-  <svg xmlns="http://www.svg.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+const InstagramIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
   </svg>
 );
 
-export const Footer = () => {
+const TikTokIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
+
+export const Footer: React.FC = () => {
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-grid">
+          {/* Brand */}
           <div>
-            <div className="footer-brand">YANTRAS</div>
+            <div className="footer-brand">Yantras</div>
             <p className="footer-desc">
-              Prendas exclusivas. Creamos identidad con minimalismo, estilo y poder.
-              Elegancia con un toque audaz para mujeres y hombres.
+              Calzado exclusivo. Creamos identidad con estilo, poder y actitud.
+              Elegancia urbana para quienes dejan huella.
             </p>
           </div>
-          
+
+          {/* Social */}
           <div>
             <h4 className="footer-title">Redes Sociales</h4>
             <div className="footer-links">
-              <a href="https://www.instagram.com/yantraspy" target="_blank" rel="noreferrer" className="footer-link flex items-center" style={{ display: 'flex', gap: '8px' }}>
-                <InstagramIcon /> @yantraspy
+              <a
+                href="https://www.instagram.com/yantraspy"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link"
+              >
+                <InstagramIcon size={16} /> @yantraspy
               </a>
-              <a href="https://www.instagram.com/yantrasformen" target="_blank" rel="noreferrer" className="footer-link flex items-center" style={{ display: 'flex', gap: '8px' }}>
-                <InstagramIcon /> @yantrasformen
+              <a
+                href="https://www.instagram.com/yantrasformen"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link"
+              >
+                <InstagramIcon size={16} /> @yantrasformen
               </a>
-              <a href="https://www.instagram.com/yantrasforwomen" target="_blank" rel="noreferrer" className="footer-link flex items-center" style={{ display: 'flex', gap: '8px' }}>
-                <InstagramIcon /> @yantrasforwomen
+              <a
+                href="https://www.instagram.com/yantrasforwomen"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link"
+              >
+                <InstagramIcon size={16} /> @yantrasforwomen
+              </a>
+              <a
+                href="#"
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link"
+              >
+                <TikTokIcon size={16} /> TikTok
               </a>
             </div>
           </div>
 
+          {/* Location */}
           <div>
             <h4 className="footer-title">Ubicación</h4>
             <div className="footer-links">
-              <a href="#" className="footer-link" style={{ display: 'flex', gap: '8px' }}>
-                <MapPin size={18} style={{ flexShrink: 0 }} /> 
-                Ciudad del Este - Shopping Mirage, Paraguay
+              <a href="#" className="footer-link">
+                <MapPin size={16} style={{ flexShrink: 0 }} />
+                Ciudad del Este, Paraguay
               </a>
             </div>
           </div>
         </div>
-        
+
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} Yantras. Todos los derechos reservados.</p>
-          <div style={{ display: 'flex', gap: '24px' }}>
+          <p className="footer-copy">
+            &copy; {new Date().getFullYear()} Yantras. Todos los derechos reservados.
+          </p>
+          <div className="footer-legal">
             <a href="#" className="footer-link">Privacidad</a>
             <a href="#" className="footer-link">Términos</a>
           </div>
