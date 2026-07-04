@@ -1,10 +1,12 @@
 import { Navbar } from './components/Navbar';
 import Hero3D from './components/Hero3D';
-import MarqueeStrip from './components/MarqueeStrip';
-import CollectionGrid from './components/CollectionGrid';
 import PhilosophySection from './components/PhilosophySection';
+import CollectionGrid from './components/CollectionGrid';
 import InfiniteCarousel from './components/InfiniteCarousel';
+import Editorial from './components/Editorial';
+import TrustBadges from './components/TrustBadges';
 import GiftSection from './components/GiftSection';
+import Newsletter from './components/Newsletter';
 import { Footer } from './components/Footer';
 import ParticlesBg from './components/ParticlesBg';
 import { Component as EtherealShadow } from './components/ui/etheral-shadow';
@@ -12,7 +14,6 @@ import { Component as EtherealShadow } from './components/ui/etheral-shadow';
 function App() {
   return (
     <>
-      {/* ─── Global Background: fixed behind the entire site ─── */}
       <div className="global-bg-container">
         <ParticlesBg />
         <EtherealShadow
@@ -28,11 +29,13 @@ function App() {
       <Navbar />
       <main style={{ position: 'relative', zIndex: 2 }}>
         <Hero3D />
-        <MarqueeStrip />
-        <CollectionGrid />
         <PhilosophySection />
+        <CollectionGrid />
         <InfiniteCarousel />
+        <Editorial />
+        <TrustBadges />
         <GiftSection />
+        <Newsletter />
       </main>
       <Footer />
     </>
