@@ -48,7 +48,7 @@ export default function CollectionGrid() {
           transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1] }}
         >
           <div className="campaign-img-wrap">
-            <img src={panels[0].image} alt={panels[0].name} className="campaign-img" loading="lazy" />
+            <img src={panels[0].image} alt={panels[0].name} className="campaign-img" loading="lazy" decoding="async" />
           </div>
           <span className="campaign-badge">{panels[0].badge}</span>
           <div className="campaign-caption">
@@ -70,7 +70,7 @@ export default function CollectionGrid() {
               transition={{ duration: 0.9, delay: i * 0.1, ease: [0.23, 1, 0.32, 1] }}
             >
               <div className="campaign-img-wrap">
-                <img src={panel.image} alt={panel.name} className="campaign-img" loading="lazy" />
+                <img src={panel.image} alt={panel.name} className="campaign-img" loading="lazy" decoding="async" />
               </div>
               <span className="campaign-badge">{panel.badge}</span>
               <div className="campaign-caption">

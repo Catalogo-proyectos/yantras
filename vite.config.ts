@@ -12,8 +12,14 @@ export default defineConfig({
     }
   },
   build: {
+    // Target modern browsers for better tree-shaking and smaller output
+    target: 'es2020',
     // Enable CSS code splitting for lazy-loaded components
     cssCodeSplit: true,
+    // Skip compressed size reporting for faster builds
+    reportCompressedSize: false,
+    // Don't inline assets larger than 4kb
+    assetsInlineLimit: 4096,
     rollupOptions: {
       output: {
         // Split heavy vendor libraries into separate cacheable chunks

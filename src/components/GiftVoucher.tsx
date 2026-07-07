@@ -2,6 +2,10 @@ import React, { useRef } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { Gift, Shield, CreditCard } from 'lucide-react';
 
+// Detect touch device once at module level
+const IS_TOUCH = typeof window !== 'undefined' &&
+  window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 export const GiftVoucher: React.FC = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   
@@ -39,9 +43,11 @@ export const GiftVoucher: React.FC = () => {
         <motion.div
           ref={cardRef}
           className="voucher-card gold-border-glow"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          style={{
+          {...(!IS_TOUCH && {
+            onMouseMove: handleMouseMove,
+            onMouseLeave: handleMouseLeave,
+          })}
+          style={IS_TOUCH ? {} : {
             rotateX: springRotateX,
             rotateY: springRotateY,
             transformStyle: 'preserve-3d',
@@ -54,28 +60,28 @@ export const GiftVoucher: React.FC = () => {
           {/* Subtle reflection shine */}
           <div className="voucher-card-shine" />
 
-          <div className="voucher-icon-row" style={{ transform: 'translateZ(30px)', transformStyle: 'preserve-3d' }}>
+          <div className="voucher-icon-row" style={IS_TOUCH ? {} : { transform: 'translateZ(30px)', transformStyle: 'preserve-3d' }}>
             <Gift className="voucher-icon" />
             <Shield className="voucher-icon" />
             <CreditCard className="voucher-icon" />
           </div>
 
-          <h3 className="voucher-title gold-gradient-text" style={{ transform: 'translateZ(45px)', margin: '16px 0' }}>
+          <h3 className="voucher-title gold-gradient-text" style={IS_TOUCH ? { margin: '16px 0' } : { transform: 'translateZ(45px)', margin: '16px 0' }}>
             VIP Gift Voucher
           </h3>
           
-          <p className="voucher-text" style={{ transform: 'translateZ(20px)' }}>
+          <p className="voucher-text" style={IS_TOUCH ? {} : { transform: 'translateZ(20px)' }}>
             Regala exclusividad. Nuestras tarjetas de regalo permiten a quien las recibe 
             elegir el calzado perfecto de nuestra colección. Disponible en múltiples denominaciones.
           </p>
 
-          <div style={{ transform: 'translateZ(35px)', display: 'inline-block', marginTop: '10px' }}>
+          <div style={IS_TOUCH ? { display: 'inline-block', marginTop: '10px' } : { transform: 'translateZ(35px)', display: 'inline-block', marginTop: '10px' }}>
             <button className="voucher-cta">
               Obtener Gift Card
             </button>
           </div>
 
-          <div className="voucher-brand" style={{ transform: 'translateZ(25px)', marginTop: '40px' }}>Yantras</div>
+          <div className="voucher-brand" style={IS_TOUCH ? { marginTop: '40px' } : { transform: 'translateZ(25px)', marginTop: '40px' }}>Yantras</div>
         </motion.div>
       </div>
     </section>

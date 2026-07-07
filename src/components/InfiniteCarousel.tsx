@@ -34,6 +34,7 @@ export default function InfiniteCarousel() {
                   alt={product.name}
                   className="product-card-img"
                   loading="lazy"
+                  decoding="async"
                 />
                 <span className="product-card-badge">{product.badge}</span>
               </div>

@@ -28,7 +28,7 @@ const BestsellerCard = memo(function BestsellerCard({ item, index }: { item: typ
       transition={{ duration: 0.75, delay: index * 0.1, ease: [0.23, 1, 0.32, 1] }}
     >
       <div className="bs-card-img-wrap">
-        <img src={item.image} alt={item.name} className="bs-card-img" loading="lazy" />
+        <img src={item.image} alt={item.name} className="bs-card-img" loading="lazy" decoding="async" />
 
         {/* Hover overlay */}
         <div className="bs-card-overlay" aria-hidden="true" />

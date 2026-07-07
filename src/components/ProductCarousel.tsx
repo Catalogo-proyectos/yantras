@@ -2,6 +2,10 @@ import React, { useState, useRef, useEffect, memo } from 'react';
 import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 
+// Detect touch device once at module level
+const IS_TOUCH = typeof window !== 'undefined' &&
+  window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
 interface Product {
   id: number;
   name: string;
@@ -22,73 +26,81 @@ const products: Product[] = [
 const CarouselCard = memo<{ product: Product }>(({ product }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   
-  // Motion values for tilt effect
+  // Motion values for tilt effect — only initialized on non-touch devices
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   
-  // Map mouse positions to rotations
   const rotateX = useTransform(y, [-0.5, 0.5], [12, -12]);
   const rotateY = useTransform(x, [-0.5, 0.5], [-12, 12]);
   
-  // Spring configurations for smooth physical feel
   const springConfig = { damping: 20, stiffness: 200 };
   const springRotateX = useSpring(rotateX, springConfig);
   const springRotateY = useSpring(rotateY, springConfig);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
+    if (IS_TOUCH || !cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
     const mouseX = e.clientX - rect.left - width / 2;
     const mouseY = e.clientY - rect.top - height / 2;
     
-    // Normalize values between -0.5 and 0.5
     x.set(mouseX / width);
     y.set(mouseY / height);
   };
 
   const handleMouseLeave = () => {
+    if (IS_TOUCH) return;
     x.set(0);
     y.set(0);
   };
 
+  // On mobile: render plain div without 3D tilt (no springs running)
+  const cardStyle = IS_TOUCH
+    ? undefined
+    : {
+        rotateX: springRotateX,
+        rotateY: springRotateY,
+        transformStyle: 'preserve-3d' as const,
+      };
+
+  const CardWrapper = IS_TOUCH ? 'div' : motion.div;
+
   return (
     <div className="carousel-card-wrapper">
-      <motion.div
+      <CardWrapper
         ref={cardRef}
         className="carousel-card"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX: springRotateX,
-          rotateY: springRotateY,
-          transformStyle: 'preserve-3d',
-        }}
+        {...(!IS_TOUCH && {
+          onMouseMove: handleMouseMove,
+          onMouseLeave: handleMouseLeave,
+          style: cardStyle,
+        })}
       >
-        <div className="carousel-card-img-container" style={{ transformStyle: 'preserve-3d' }}>
+        <div className="carousel-card-img-container" style={IS_TOUCH ? undefined : { transformStyle: 'preserve-3d' }}>
           <img
             src={product.image}
             alt={product.name}
             className="carousel-card-image"
             loading="lazy"
-            style={{
+            decoding="async"
+            style={IS_TOUCH ? undefined : {
               transform: 'translateZ(30px)',
             }}
           />
         </div>
-        <div className="carousel-card-info" style={{ transformStyle: 'preserve-3d' }}>
-          <div className="carousel-card-name" style={{ transform: 'translateZ(40px)' }}>
+        <div className="carousel-card-info" style={IS_TOUCH ? undefined : { transformStyle: 'preserve-3d' }}>
+          <div className="carousel-card-name" style={IS_TOUCH ? undefined : { transform: 'translateZ(40px)' }}>
             {product.name}
           </div>
-          <div className="carousel-card-meta" style={{ transform: 'translateZ(35px)' }}>
+          <div className="carousel-card-meta" style={IS_TOUCH ? undefined : { transform: 'translateZ(35px)' }}>
             <span className="carousel-card-price">{product.price}</span>
             <button className="carousel-card-btn" aria-label={`Ver detalles de ${product.name}`}>
               Ver <ArrowUpRight size={14} />
             </button>
           </div>
         </div>
-      </motion.div>
+      </CardWrapper>
     </div>
   );
 });

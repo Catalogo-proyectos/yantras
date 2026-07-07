@@ -42,6 +42,7 @@ export default function GiftSection() {
                 alt={panel.label}
                 className="triptych-img"
                 loading="lazy"
+                decoding="async"
               />
               <div className="triptych-overlay" />
             </div>

@@ -20,12 +20,16 @@ export default function ParticlesBg() {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
+    const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
     let animationId: number;
     let particles: Particle[] = [];
     let visible = true;
+    let inViewport = true; // IntersectionObserver-based visibility
     let lastFrameTime = 0;
-    // Target ~30 FPS (33ms interval) — visually imperceptible for slow-drifting particles
-    const FRAME_INTERVAL = 33;
+    // Mobile: ~20 FPS (50ms) — particles drift so slowly this is imperceptible
+    // Desktop: ~30 FPS (33ms)
+    const FRAME_INTERVAL = isMobile ? 50 : 33;
 
     // Cache pre-rendered gold and silver glowing particles offscreen
     const goldGlowCanvas = document.createElement('canvas');
@@ -71,8 +75,11 @@ export default function ParticlesBg() {
 
     const init = () => {
       particles = [];
-      // Dynamic count based on height, same as original code
-      const count = Math.min(180, Math.max(50, Math.floor((canvas.height / 1000) * 45)));
+      // Dynamic count based on height — reduced on mobile for perf
+      const baseCount = Math.floor((canvas.height / 1000) * 45);
+      const count = isMobile
+        ? Math.min(30, Math.max(15, baseCount))  // Cap at 30 on mobile
+        : Math.min(180, Math.max(50, baseCount));
       
       for (let i = 0; i < count; i++) {
         const isGold = i < count * 0.3; // 30% gold particles
@@ -91,7 +98,7 @@ export default function ParticlesBg() {
     const draw = (timestamp: number) => {
       animationId = requestAnimationFrame(draw);
 
-      if (!visible) return;
+      if (!visible || !inViewport) return;
 
       // Frame-skip: only render at ~30 FPS to halve CPU usage
       if (timestamp - lastFrameTime < FRAME_INTERVAL) return;
@@ -129,6 +136,17 @@ export default function ParticlesBg() {
       ctx.globalAlpha = 1;
     };
 
+    // Pause canvas when scrolled out of the fixed background container
+    let observer: IntersectionObserver | null = null;
+    const parent = canvas.parentElement;
+    if (parent) {
+      observer = new IntersectionObserver(
+        ([entry]) => { inViewport = entry.isIntersecting; },
+        { threshold: 0 }
+      );
+      observer.observe(parent);
+    }
+
     resize();
     animationId = requestAnimationFrame(draw);
 
@@ -138,6 +156,7 @@ export default function ParticlesBg() {
       cancelAnimationFrame(animationId);
       window.removeEventListener('resize', resize);
       document.removeEventListener('visibilitychange', handleVisibility);
+      observer?.disconnect();
     };
   }, []);
 

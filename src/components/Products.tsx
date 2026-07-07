@@ -68,6 +68,7 @@ export const Products: React.FC = () => {
                 alt={product.name}
                 className="product-card-image"
                 loading="lazy"
+                decoding="async"
               />
               <div className="product-card-overlay">
                 <div>

@@ -16,6 +16,7 @@ export default function PromoBanner() {
           alt="Yantras Drop 02 Preventa"
           className="promo-img"
           loading="lazy"
+          decoding="async"
         />
         {/* Gradient fade to right */}
         <div className="promo-img-fade" aria-hidden="true" />

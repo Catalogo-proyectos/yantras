@@ -1,4 +1,4 @@
-import { useRef, useId, useEffect } from 'react';
+import { useRef, useId, useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { animate, useMotionValue } from 'framer-motion';
 import type { AnimationPlaybackControls } from 'framer-motion';
@@ -65,7 +65,13 @@ export function Component({
     className
 }: ShadowOverlayProps) {
     const id = useInstanceId();
-    const animationEnabled = animation && animation.scale > 0;
+    // Detect touch/mobile devices — SVG filter chain is too expensive for mobile GPUs
+    const [isMobile] = useState(() =>
+        typeof window !== 'undefined' &&
+        window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    );
+    // Disable SVG filter animation entirely on mobile — keeps color + noise intact
+    const animationEnabled = animation && animation.scale > 0 && !isMobile;
     const feColorMatrixRef = useRef<SVGFEColorMatrixElement>(null);
     const hueRotateMotionValue = useMotionValue(180);
     const hueRotateAnimation = useRef<AnimationPlaybackControls | null>(null);
