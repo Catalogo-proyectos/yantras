@@ -17,8 +17,8 @@ export default function Editorial() {
         viewport={{ once: true, margin: '-80px' }}
         transition={{ duration: 1, ease: [0.23, 1, 0.32, 1] }}
       >
-        <img src="/images/editorial.png" alt="Yantras Editorial" className="editorial-img" loading="lazy" />
-        <span className="editorial-img-label">DROP 01 // ESTÉTICA DE LA ESPERA</span>
+        <img src="/images/editorial_new.png" alt="Yantras Editorial" className="editorial-img" loading="lazy" />
+        <span className="editorial-img-label">DROP 01 // EDICIONES EXCLUSIVAS DE CUERO</span>
       </motion.div>
 
       <motion.div

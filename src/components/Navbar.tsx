@@ -27,20 +27,20 @@ export const Navbar: React.FC = () => {
     <>
       <nav id="main-nav" className={`navbar ${scrolled ? 'scrolled' : ''}`}>
         <div className="nav-links">
-          <a href="#coleccion" className="nav-link">Colección</a>
-          <a href="#editorial" className="nav-link">Editorial</a>
+          <a href="#" onClick={(e) => e.preventDefault()} className="nav-link">Colección</a>
+          <a href="#" onClick={(e) => e.preventDefault()} className="nav-link">Editorial</a>
         </div>
 
-        <a href="#" className="nav-brand">Yantras</a>
+        <a href="#" onClick={(e) => e.preventDefault()} className="nav-brand">Yantras</a>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
           <div className="nav-links">
-            <a href="#gift" className="nav-link">Gift Card</a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="nav-link">Gift Card</a>
           </div>
-          <a href="#coleccion" className="nav-cta">Ver Colección</a>
+          <a href="#" onClick={(e) => e.preventDefault()} className="nav-cta">Ver Colección</a>
           <div className="nav-links" style={{ gap: '20px' }}>
-            <a href="#" className="nav-link" aria-label="Buscar"><Search size={18} /></a>
-            <a href="#" className="nav-link" aria-label="Carrito"><ShoppingBag size={18} /></a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="nav-link" aria-label="Buscar"><Search size={18} /></a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="nav-link" aria-label="Carrito"><ShoppingBag size={18} /></a>
           </div>
           <button 
             className="nav-hamburger" 
@@ -61,11 +61,11 @@ export const Navbar: React.FC = () => {
         >
           <X size={28} />
         </button>
-        <a href="#coleccion" className="nav-link" onClick={() => setMenuOpen(false)}>Colección</a>
-        <a href="#editorial" className="nav-link" onClick={() => setMenuOpen(false)}>Editorial</a>
-        <a href="#gift" className="nav-link" onClick={() => setMenuOpen(false)}>Gift Card</a>
-        <a href="#" className="nav-link" onClick={() => setMenuOpen(false)}>Buscar</a>
-        <a href="#" className="nav-link" onClick={() => setMenuOpen(false)}>Carrito</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }} className="nav-link">Colección</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }} className="nav-link">Editorial</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }} className="nav-link">Gift Card</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }} className="nav-link">Buscar</a>
+        <a href="#" onClick={(e) => { e.preventDefault(); setMenuOpen(false); }} className="nav-link">Carrito</a>
       </div>
     </>
   );

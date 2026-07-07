@@ -3,9 +3,11 @@ import Hero3D from './components/Hero3D';
 import PhilosophySection from './components/PhilosophySection';
 import CollectionGrid from './components/CollectionGrid';
 import InfiniteCarousel from './components/InfiniteCarousel';
+import BestsellersRow from './components/BestsellersRow';
 import Editorial from './components/Editorial';
 import TrustBadges from './components/TrustBadges';
 import GiftSection from './components/GiftSection';
+import PromoBanner from './components/PromoBanner';
 import Newsletter from './components/Newsletter';
 import { Footer } from './components/Footer';
 import ParticlesBg from './components/ParticlesBg';
@@ -32,9 +34,11 @@ function App() {
         <PhilosophySection />
         <CollectionGrid />
         <InfiniteCarousel />
+        <BestsellersRow />
         <Editorial />
         <TrustBadges />
         <GiftSection />
+        <PromoBanner />
         <Newsletter />
       </main>
       <Footer />

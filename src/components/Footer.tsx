@@ -54,33 +54,29 @@ export const Footer: React.FC = () => {
             <h4 className="footer-title">Redes Sociales</h4>
             <div className="footer-links">
               <a
-                href="https://www.instagram.com/yantraspy"
-                target="_blank"
-                rel="noreferrer"
+                href="#"
+                onClick={(e) => e.preventDefault()}
                 className="footer-link"
               >
                 <InstagramIcon size={16} /> @yantraspy
               </a>
               <a
-                href="https://www.instagram.com/yantrasformen"
-                target="_blank"
-                rel="noreferrer"
+                href="#"
+                onClick={(e) => e.preventDefault()}
                 className="footer-link"
               >
                 <InstagramIcon size={16} /> @yantrasformen
               </a>
               <a
-                href="https://www.instagram.com/yantrasforwomen"
-                target="_blank"
-                rel="noreferrer"
+                href="#"
+                onClick={(e) => e.preventDefault()}
                 className="footer-link"
               >
                 <InstagramIcon size={16} /> @yantrasforwomen
               </a>
               <a
                 href="#"
-                target="_blank"
-                rel="noreferrer"
+                onClick={(e) => e.preventDefault()}
                 className="footer-link"
               >
                 <TikTokIcon size={16} /> TikTok
@@ -105,8 +101,8 @@ export const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} Yantras. Todos los derechos reservados.
           </p>
           <div className="footer-legal">
-            <a href="#" className="footer-link">Privacidad</a>
-            <a href="#" className="footer-link">Términos</a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Privacidad</a>
+            <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Términos</a>
           </div>
         </div>
       </div>

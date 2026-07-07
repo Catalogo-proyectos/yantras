@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 
 const products = [
-  { id: 4, name: 'Void Platform', price: 'Gs. 1.100.000', image: '/images/product4.png', badge: 'EXCLUSIVO', drop: 'DROP 01' },
-  { id: 5, name: 'Crimson Edge', price: 'Gs. 780.000', image: '/images/product5.png', badge: 'NUEVO', drop: 'DROP 01' },
-  { id: 6, name: 'Noir Essential', price: 'Gs. 680.000', image: '/images/product6.png', badge: 'ÚLTIMAS UNIDADES', drop: 'DROP 01' },
+  { id: 4, name: 'Sienna Suede Loafer', price: 'Gs. 820.000', image: '/images/product_moccasins_alt.png', badge: 'EXCLUSIVO', drop: 'DROP 01' },
+  { id: 5, name: 'Alabaster Ankle Boot', price: 'Gs. 1.250.000', image: '/images/product_white_boots.png', badge: 'NUEVO', drop: 'DROP 01' },
+  { id: 6, name: 'Obsidian Knee Boot', price: 'Gs. 1.350.000', image: '/images/product_black_boots.png', badge: 'ÚLTIMAS UNIDADES', drop: 'DROP 01' },
 ];
 
 export default function InfiniteCarousel() {

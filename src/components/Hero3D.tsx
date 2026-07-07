@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 
 export default function Hero3D() {
   const handleScroll = () => {
-    document.getElementById('manifesto-section')?.scrollIntoView({ behavior: 'smooth' });
+    // decorative only
   };
 
   return (
@@ -12,8 +12,9 @@ export default function Hero3D() {
       {/* Film grain overlay */}
       <div className="hero-film-grain" aria-hidden="true" />
 
-      {/* Dark vignette overlay */}
+      {/* Dark shadow overlay (texture) */}
       <div className="hero-dark-overlay" aria-hidden="true" />
+
 
       {/* Decorative vertical sides */}
       <div className="hero-side hero-left">

@@ -2,18 +2,18 @@ import { motion } from 'framer-motion';
 
 const panels = [
   {
-    image: '/images/product1.png',
-    label: 'OBSIDIAN RUNNER',
+    image: '/images/product_black_boots.png',
+    label: 'OBSIDIAN WOMAN BOOT',
     sub: 'DROP 01',
   },
   {
-    image: '/images/editorial.png',
-    label: 'ESTÉTICA DE LA ESPERA',
+    image: '/images/editorial_new.png',
+    label: 'ESTÉTICA EN MOVIMIENTO',
     sub: 'MANIFIESTO',
   },
   {
-    image: '/images/product5.png',
-    label: 'CRIMSON EDGE',
+    image: '/images/product_moccasins.png',
+    label: 'NOIR HORSEBIT LOAFER',
     sub: 'DROP 01',
   },
 ];

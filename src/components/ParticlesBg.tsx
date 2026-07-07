@@ -6,7 +6,7 @@ interface Particle {
   size: number;
   speedX: number;
   speedY: number;
-  color: string;
+  isGold: boolean;
   opacity: number;
 }
 
@@ -17,103 +17,136 @@ export default function ParticlesBg() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animationId: number;
     let particles: Particle[] = [];
+    let visible = true;
 
-    const resizeCanvas = () => {
-      const parentWidth = canvas.parentElement?.clientWidth || window.innerWidth;
-      const parentHeight = canvas.parentElement?.clientHeight || window.innerHeight;
-      canvas.width = parentWidth;
-      canvas.height = parentHeight;
+    // Cache pre-rendered gold and silver glowing particles offscreen
+    const goldGlowCanvas = document.createElement('canvas');
+    goldGlowCanvas.width = 32;
+    goldGlowCanvas.height = 32;
+    const gCtx = goldGlowCanvas.getContext('2d');
+    if (gCtx) {
+      const grad = gCtx.createRadialGradient(16, 16, 1, 16, 16, 14);
+      grad.addColorStop(0, '#FFFDF0'); // bright white-gold center
+      grad.addColorStop(0.2, '#C9A84C'); // core gold color
+      grad.addColorStop(0.5, 'rgba(201, 168, 76, 0.35)'); // outer soft glow
+      grad.addColorStop(1, 'rgba(201, 168, 76, 0)');
+      gCtx.fillStyle = grad;
+      gCtx.beginPath();
+      gCtx.arc(16, 16, 16, 0, Math.PI * 2);
+      gCtx.fill();
+    }
 
-      // Scale particle count based on height (35 particles per 1000px height)
-      // Capped between 45 and 220 to maintain density and prevent GPU performance drops.
-      const calculatedCount = Math.min(220, Math.max(45, Math.floor((parentHeight / 1000) * 35)));
-      initParticles(calculatedCount);
+    const silverGlowCanvas = document.createElement('canvas');
+    silverGlowCanvas.width = 16;
+    silverGlowCanvas.height = 16;
+    const sCtx = silverGlowCanvas.getContext('2d');
+    if (sCtx) {
+      const grad = sCtx.createRadialGradient(8, 8, 1, 8, 8, 7);
+      grad.addColorStop(0, '#FFFFFF');
+      grad.addColorStop(0.3, '#EAEAEA');
+      grad.addColorStop(1, 'rgba(234, 234, 234, 0)');
+      sCtx.fillStyle = grad;
+      sCtx.beginPath();
+      sCtx.arc(8, 8, 8, 0, Math.PI * 2);
+      sCtx.fill();
+    }
+
+    const handleVisibility = () => { visible = !document.hidden; };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    const resize = () => {
+      // Use logical OR fallback to prevent 0 width/height when container is not fully laid out
+      canvas.width  = canvas.parentElement?.clientWidth  || window.innerWidth;
+      canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+      init();
     };
 
-    const initParticles = (particleCount: number) => {
+    const init = () => {
       particles = [];
-      const goldColor = '#C9A84C';
+      // Dynamic count based on height, same as original code
+      const count = Math.min(180, Math.max(50, Math.floor((canvas.height / 1000) * 45)));
       
-      for (let i = 0; i < particleCount; i++) {
-        // 30% golden particles, 70% silver/white particles
-        const isGold = i < particleCount * 0.3;
-        
+      for (let i = 0; i < count; i++) {
+        const isGold = i < count * 0.3; // 30% gold particles
         particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: Math.random() * (isGold ? 2.5 : 1.8) + 1,
-          speedX: (Math.random() - 0.5) * 0.15,
-          speedY: -(Math.random() * 0.3 + 0.1), // upward drift
-          color: isGold ? goldColor : '#EAEAEA',
+          x:       Math.random() * canvas.width,
+          y:       Math.random() * canvas.height,
+          size:    Math.random() * (isGold ? 2.5 : 1.8) + 1, // original particle sizes
+          speedX:  (Math.random() - 0.5) * 0.15,
+          speedY:  -(Math.random() * 0.3 + 0.1), // upward drift speed
+          isGold,
           opacity: Math.random() * (isGold ? 0.6 : 0.4) + 0.15,
         });
       }
     };
 
-    const drawParticles = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach((p) => {
-        ctx.save();
-        ctx.globalAlpha = p.opacity;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        
-        // Soft glow for golden particles
-        if (p.color === '#C9A84C') {
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = '#C9A84C';
-        }
-        
-        ctx.fill();
-        ctx.restore();
+    const draw = () => {
+      if (!visible) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
 
-        // Update positions
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (const p of particles) {
+        ctx.globalAlpha = p.opacity;
+        
+        // Draw pre-rendered glowing template depending on type
+        if (p.isGold) {
+          // Gold template is 32px (16px radius), scale according to size
+          const drawSize = p.size * 3.5; 
+          ctx.drawImage(goldGlowCanvas, p.x - drawSize / 2, p.y - drawSize / 2, drawSize, drawSize);
+        } else {
+          // Silver template is 16px (8px radius)
+          const drawSize = p.size * 2;
+          ctx.drawImage(silverGlowCanvas, p.x - drawSize / 2, p.y - drawSize / 2, drawSize, drawSize);
+        }
+
         p.x += p.speedX;
         p.y += p.speedY;
 
-        // Reset if particles go off-screen
-        if (p.y < -10) {
-          p.y = canvas.height + 10;
-          p.x = Math.random() * canvas.width;
+        // Wrap around screen boundaries
+        if (p.y < -15) { 
+          p.y = canvas.height + 15; 
+          p.x = Math.random() * canvas.width; 
         }
-        if (p.x < -10 || p.x > canvas.width + 10) {
+        if (p.x < -15 || p.x > canvas.width + 15) {
           p.speedX = -p.speedX;
         }
-      });
+      }
 
-      animationId = requestAnimationFrame(drawParticles);
+      ctx.globalAlpha = 1;
+      animationId = requestAnimationFrame(draw);
     };
 
-    resizeCanvas();
-    drawParticles();
+    resize();
+    draw();
 
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('resize', resize, { passive: true });
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('resize', resize);
+      document.removeEventListener('visibilitychange', handleVisibility);
     };
   }, []);
 
   return (
-    <canvas 
-      ref={canvasRef} 
+    <canvas
+      ref={canvasRef}
       style={{
         position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
+        top: 0, left: 0,
+        width: '100%', height: '100%',
         pointerEvents: 'none',
         zIndex: 2,
       }}
+      aria-hidden="true"
     />
   );
 }
