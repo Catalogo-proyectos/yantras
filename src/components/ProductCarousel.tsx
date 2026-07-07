@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, memo } from 'react';
 import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion';
 import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
 
@@ -18,7 +18,8 @@ const products: Product[] = [
   { id: 6, name: 'Noir Essential', price: 'Gs. 680.000', image: '/images/product6.png' },
 ];
 
-const CarouselCard: React.FC<{ product: Product }> = ({ product }) => {
+// Memoized to avoid re-renders when parent carousel state changes (drag position, progress)
+const CarouselCard = memo<{ product: Product }>(({ product }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   
   // Motion values for tilt effect
@@ -90,13 +91,18 @@ const CarouselCard: React.FC<{ product: Product }> = ({ product }) => {
       </motion.div>
     </div>
   );
-};
+});
+
+CarouselCard.displayName = 'CarouselCard';
 
 export const ProductCarousel: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [dragConstraints, setDragConstraints] = useState({ left: 0, right: 0 });
-  const [progress, setProgress] = useState(0);
+  // Track progress via ref for arrow button disabled state only
+  const progressRef = useRef(0);
+  const [, forceUpdate] = useState(0);
   const x = useMotionValue(0);
 
   // Measure track and container for drag limits
@@ -120,12 +126,16 @@ export const ProductCarousel: React.FC = () => {
     };
   }, []);
 
-  // Update progress bar
+  // Update progress bar via direct DOM manipulation — avoids React re-renders on every pixel
   useEffect(() => {
     const unsubscribe = x.on('change', (latest) => {
       if (dragConstraints.left === 0) return;
       const percent = Math.min(Math.max(latest / dragConstraints.left, 0), 1) * 100;
-      setProgress(percent);
+      progressRef.current = percent;
+      // Direct DOM update — no setState, no re-render
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${percent}%`;
+      }
     });
     return () => unsubscribe();
   }, [dragConstraints.left, x]);
@@ -146,6 +156,7 @@ export const ProductCarousel: React.FC = () => {
       type: 'spring',
       stiffness: 150,
       damping: 20,
+      onComplete: () => forceUpdate(n => n + 1), // Update arrow disabled states after animation
     });
   };
 
@@ -182,8 +193,9 @@ export const ProductCarousel: React.FC = () => {
         <div className="carousel-controls">
           <div className="carousel-progress-track">
             <div 
+              ref={progressBarRef}
               className="carousel-progress-bar" 
-              style={{ width: `${progress}%` }} 
+              style={{ width: '0%' }} 
             />
           </div>
           
@@ -191,7 +203,7 @@ export const ProductCarousel: React.FC = () => {
             <button 
               className="carousel-arrow" 
               onClick={() => slide('left')}
-              disabled={progress <= 1}
+              disabled={progressRef.current <= 1}
               aria-label="Anterior"
             >
               <ArrowLeft size={18} />
@@ -199,7 +211,7 @@ export const ProductCarousel: React.FC = () => {
             <button 
               className="carousel-arrow" 
               onClick={() => slide('right')}
-              disabled={progress >= 99}
+              disabled={progressRef.current >= 99}
               aria-label="Siguiente"
             >
               <ArrowRight size={18} />

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { motion } from 'framer-motion';
 
 const ITEMS = [
@@ -16,7 +16,7 @@ function WishlistIcon({ active }: { active: boolean }) {
   );
 }
 
-function BestsellerCard({ item, index }: { item: typeof ITEMS[0]; index: number }) {
+const BestsellerCard = memo(function BestsellerCard({ item, index }: { item: typeof ITEMS[0]; index: number }) {
   const [wished, setWished] = useState(false);
 
   return (
@@ -55,7 +55,7 @@ function BestsellerCard({ item, index }: { item: typeof ITEMS[0]; index: number 
       </div>
     </motion.article>
   );
-}
+});
 
 export default function BestsellersRow() {
   return (

@@ -79,6 +79,13 @@ export function Component({
             if (hueRotateAnimation.current) {
                 hueRotateAnimation.current.stop();
             }
+
+            // Frame-skip counter: only update SVG attribute every 3rd frame
+            // This reduces setAttribute calls from ~60/s to ~20/s — massive perf win
+            // for expensive SVG filter chains (feTurbulence + 2x feDisplacementMap)
+            let frameCount = 0;
+            let lastValue = 0;
+
             hueRotateMotionValue.set(0);
             hueRotateAnimation.current = animate(hueRotateMotionValue, 360, {
                 duration: animationDuration / 8,  // was /25 — slower = fewer ticks
@@ -88,8 +95,12 @@ export function Component({
                 ease: "linear",
                 delay: 0,
                 onUpdate: (value: number) => {
+                    lastValue = value;
+                    frameCount++;
+                    // Only apply every 3rd frame — SVG filter recomputation is very expensive
+                    if (frameCount % 3 !== 0) return;
                     if (feColorMatrixRef.current) {
-                        feColorMatrixRef.current.setAttribute("values", String(value));
+                        feColorMatrixRef.current.setAttribute("values", String(lastValue));
                     }
                 }
             });

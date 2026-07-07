@@ -7,7 +7,9 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+      const isScrolled = window.scrollY > 50;
+      // Only trigger a re-render when the state actually changes
+      setScrolled(prev => prev === isScrolled ? prev : isScrolled);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);

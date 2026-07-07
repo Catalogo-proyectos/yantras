@@ -1,17 +1,20 @@
+import { lazy, Suspense } from 'react';
 import { Navbar } from './components/Navbar';
 import Hero3D from './components/Hero3D';
-import PhilosophySection from './components/PhilosophySection';
-import CollectionGrid from './components/CollectionGrid';
-import InfiniteCarousel from './components/InfiniteCarousel';
-import BestsellersRow from './components/BestsellersRow';
-import Editorial from './components/Editorial';
-import TrustBadges from './components/TrustBadges';
-import GiftSection from './components/GiftSection';
-import PromoBanner from './components/PromoBanner';
-import Newsletter from './components/Newsletter';
-import { Footer } from './components/Footer';
 import ParticlesBg from './components/ParticlesBg';
 import { Component as EtherealShadow } from './components/ui/etheral-shadow';
+
+// Below-the-fold components — lazy loaded for faster initial paint
+const PhilosophySection = lazy(() => import('./components/PhilosophySection'));
+const CollectionGrid = lazy(() => import('./components/CollectionGrid'));
+const InfiniteCarousel = lazy(() => import('./components/InfiniteCarousel'));
+const BestsellersRow = lazy(() => import('./components/BestsellersRow'));
+const Editorial = lazy(() => import('./components/Editorial'));
+const TrustBadges = lazy(() => import('./components/TrustBadges'));
+const GiftSection = lazy(() => import('./components/GiftSection'));
+const PromoBanner = lazy(() => import('./components/PromoBanner'));
+const Newsletter = lazy(() => import('./components/Newsletter'));
+const Footer = lazy(() => import('./components/Footer').then(m => ({ default: m.Footer })));
 
 function App() {
   return (
@@ -31,17 +34,21 @@ function App() {
       <Navbar />
       <main style={{ position: 'relative', zIndex: 2 }}>
         <Hero3D />
-        <PhilosophySection />
-        <CollectionGrid />
-        <InfiniteCarousel />
-        <BestsellersRow />
-        <Editorial />
-        <TrustBadges />
-        <GiftSection />
-        <PromoBanner />
-        <Newsletter />
+        <Suspense fallback={null}>
+          <PhilosophySection />
+          <CollectionGrid />
+          <InfiniteCarousel />
+          <BestsellersRow />
+          <Editorial />
+          <TrustBadges />
+          <GiftSection />
+          <PromoBanner />
+          <Newsletter />
+        </Suspense>
       </main>
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </>
   );
 }

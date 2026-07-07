@@ -23,6 +23,9 @@ export default function ParticlesBg() {
     let animationId: number;
     let particles: Particle[] = [];
     let visible = true;
+    let lastFrameTime = 0;
+    // Target ~30 FPS (33ms interval) — visually imperceptible for slow-drifting particles
+    const FRAME_INTERVAL = 33;
 
     // Cache pre-rendered gold and silver glowing particles offscreen
     const goldGlowCanvas = document.createElement('canvas');
@@ -85,11 +88,14 @@ export default function ParticlesBg() {
       }
     };
 
-    const draw = () => {
-      if (!visible) {
-        animationId = requestAnimationFrame(draw);
-        return;
-      }
+    const draw = (timestamp: number) => {
+      animationId = requestAnimationFrame(draw);
+
+      if (!visible) return;
+
+      // Frame-skip: only render at ~30 FPS to halve CPU usage
+      if (timestamp - lastFrameTime < FRAME_INTERVAL) return;
+      lastFrameTime = timestamp;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -121,11 +127,10 @@ export default function ParticlesBg() {
       }
 
       ctx.globalAlpha = 1;
-      animationId = requestAnimationFrame(draw);
     };
 
     resize();
-    draw();
+    animationId = requestAnimationFrame(draw);
 
     window.addEventListener('resize', resize, { passive: true });
 

@@ -625,11 +625,9 @@ button {
   display: flex;
   width: max-content;
   animation: scroll-carousel 36s linear infinite;
-  will-change: transform;
 }
 
 .infinite-carousel-section:hover .infinite-carousel-container {
-  will-change: transform;
   animation-play-state: paused;
 }
 
@@ -1715,7 +1713,7 @@ button {
 /* ============================================
    FEATURED PRODUCTS — 3-COL PRODUCT CARDS
    ============================================ */
-.featured-section{position:relative;z-index:5;padding:100px 6%;background:transparent}
+.featured-section{position:relative;z-index:5;padding:100px 6%;background:transparent;content-visibility:auto;contain-intrinsic-size:auto 800px}
 .featured-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;padding-bottom:24px;border-bottom:1px solid var(--border-dark)}
 .featured-title-group{display:flex;flex-direction:column;gap:6px}
 .featured-eyebrow{font-family:var(--font-heading);font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);opacity:0.7}
@@ -1743,7 +1741,7 @@ button {
 /* ============================================
    EDITORIAL SPLIT — 50/50 + STATS
    ============================================ */
-.editorial-split-section{display:flex;width:100vw;min-height:80vh;position:relative;z-index:5}
+.editorial-split-section{display:flex;width:100vw;min-height:80vh;position:relative;z-index:5;content-visibility:auto;contain-intrinsic-size:auto 600px}
 .editorial-img-col{flex:0 0 50%;position:relative;overflow:hidden;background:var(--bg-secondary)}
 .editorial-img{width:100%;height:100%;object-fit:cover;filter:brightness(0.75) contrast(1.05);position:absolute;inset:0}
 .editorial-img-label{position:absolute;bottom:24px;left:28px;font-family:var(--font-heading);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold-light);opacity:0.6;z-index:2}
@@ -1763,7 +1761,7 @@ button {
 /* ============================================
    TRUST BADGES — 3-COL ROW
    ============================================ */
-.trust-section{position:relative;z-index:5;padding:80px 6%;border-top:1px solid var(--border-dark);border-bottom:1px solid var(--border-dark)}
+.trust-section{position:relative;z-index:5;padding:80px 6%;border-top:1px solid var(--border-dark);border-bottom:1px solid var(--border-dark);content-visibility:auto;contain-intrinsic-size:auto 300px}
 .trust-container{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;max-width:900px;margin:0 auto}
 .trust-badge{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px}
 .trust-icon{color:var(--gold);opacity:0.75}
@@ -1774,7 +1772,7 @@ button {
 /* ============================================
    NEWSLETTER — EMAIL SIGNUP
    ============================================ */
-.newsletter-section{position:relative;z-index:5;padding:100px 6%;background:transparent}
+.newsletter-section{position:relative;z-index:5;padding:100px 6%;background:transparent;content-visibility:auto;contain-intrinsic-size:auto 400px}
 .newsletter-container{display:flex;align-items:center;justify-content:space-between;gap:60px;max-width:1100px;margin:0 auto;padding:60px;background:rgba(255,255,255,0.015);border:1px solid var(--border-dark)}
 .newsletter-content{flex:1}
 .newsletter-eyebrow{display:block;font-family:var(--font-heading);font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);opacity:0.7;margin-bottom:12px}

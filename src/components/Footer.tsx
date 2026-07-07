@@ -35,6 +35,9 @@ const TikTokIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
   </svg>
 );
 
+// Precalculated at module load — no need to create a new Date on every render
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC = () => {
   return (
     <footer className="footer">
@@ -98,7 +101,7 @@ export const Footer: React.FC = () => {
 
         <div className="footer-bottom">
           <p className="footer-copy">
-            &copy; {new Date().getFullYear()} Yantras. Todos los derechos reservados.
+            &copy; {CURRENT_YEAR} Yantras. Todos los derechos reservados.
           </p>
           <div className="footer-legal">
             <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Privacidad</a>

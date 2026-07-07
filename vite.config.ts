@@ -10,5 +10,25 @@ export default defineConfig({
       'react': path.resolve(process.cwd(), 'node_modules/react'),
       'react-dom': path.resolve(process.cwd(), 'node_modules/react-dom'),
     }
-  }
+  },
+  build: {
+    // Enable CSS code splitting for lazy-loaded components
+    cssCodeSplit: true,
+    rollupOptions: {
+      output: {
+        // Split heavy vendor libraries into separate cacheable chunks
+        manualChunks(id: string) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/three') || id.includes('node_modules/@react-three')) {
+            return 'vendor-three';
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion';
+          }
+        },
+      },
+    },
+  },
 })
